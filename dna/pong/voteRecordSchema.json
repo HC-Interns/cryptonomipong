@@ -2,6 +2,7 @@
   "type" : "object",
   "properties" : {
     "tickCount" : {"type" : "integer"},
+    "from" : {"type" : "string"},
     "vote" : {"type" : "object"}
   }
 }

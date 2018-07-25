@@ -6,9 +6,9 @@
       "FnName": "messageRef",
       "Input": {"tickCount" : "%reps%", "vote": {"up" : true}},
       "Output": true,
-      "Time": 1000,
+      "Time": 3000,
       "Repeat": 10,
-      "Wait" : 100
+      "Wait" : 50
     },
     {
       "Convey": "Can get the responses cached to local chain",

@@ -58,6 +58,7 @@ function stateTransition(oldState, votes) {
 
 function getCurrentRef(tickCount) {
   var agentList = getLinks(App.DNA.Hash, 'agent');
+  debug("visible agents: "+agentList.length);
   return agentList[tickCount % agentList.length].Hash;
 }
 
@@ -95,7 +96,8 @@ function getReceivedVotes(tickCount) {
 
 // commit a voteRecord to local chain when received via messaging
 // TODO: add validation
-function receive(from, message) {
+function receive(frm, message) {
+  message.from = frm;
   debug('message received: ' +  JSON.stringify(message));
   commit('voteRecord', message);
   return true;
