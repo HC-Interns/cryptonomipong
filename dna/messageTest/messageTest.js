@@ -16,7 +16,7 @@ function responseCallback(response, id) {
 }
 
 function getResponses() {
-  return query({
+  var result = query({
     Return: {
       Entries: true
     },
@@ -24,6 +24,8 @@ function getResponses() {
       EntryTypes: ["responseRecord"],
     }
   });
+  debug(result);
+  return result;
 }
 
 
