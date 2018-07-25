@@ -29,7 +29,7 @@
             },
             "Entries": [
                 {
-                    "Name": "agentLink",
+                    "Name": "link",
                     "DataFormat": "links",
                     "Sharing": "public"
                 },
@@ -38,6 +38,17 @@
                     "DataFormat": "json",
                     "SchemaFile" : "voteRecordSchema.json",
                     "Sharing": "private"
+                },
+                {
+                    "Name": "gameState",
+                    "DataFormat": "json",
+                    "SchemaFile" : "gameStateSchema.json",
+                    "Sharing": "public"
+                },
+                {
+                    "Name": "anchor",
+                    "DataFormat": "string",
+                    "Sharing": "public"
                 }
             ],
             "Functions": [
