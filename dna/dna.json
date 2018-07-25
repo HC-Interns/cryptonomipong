@@ -34,7 +34,7 @@
                 {
                     "Name": "responseRecord",
                     "DataFormat": "string",
-                    "Sharing": "public"
+                    "Sharing": "private"
                 }
             ],
             "Functions": [
@@ -44,7 +44,7 @@
                     "Exposure": "public"
                 },
                 {
-                    "Name": "messageRefSync",
+                    "Name": "getResponses",
                     "CallingType": "json",
                     "Exposure": "public"
                 }

@@ -10,19 +10,20 @@ function messageRef(payload) {
 }
 
 
-function messageRefSync(payload) {
-  var tickCount = payload.tickCount;
-
-  var agentList = getLinks(App.DNA.Hash, 'agent');
-  var agentToMessage = agentList[tickCount % agentList.length];
-
-  return send(agentToMessage.Hash, {});
-}
-
-
 function responseCallback(response, id) {
   debug("response of message tick "+id+": "+response);
   commit('responseRecord', response);
+}
+
+function getResponses() {
+  return query({
+    Return: {
+      Entries: true
+    },
+    Constrain: {
+      EntryTypes: ["responseRecord"],
+    }
+  });
 }
 
 
