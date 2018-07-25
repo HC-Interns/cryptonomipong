@@ -1,0 +1,12 @@
+{
+  "Tests": [
+    {
+      "Convey": "Can call the function to message",
+      "Zome": "messageTest",
+      "FnName": "messageRef",
+      "Input": {"tickCount" : 0},
+      "Output": true,
+      "Time": 500
+    }
+  ]
+}

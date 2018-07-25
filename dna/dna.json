@@ -1,0 +1,54 @@
+{
+    "Version": 1,
+    "UUID": "0bb0a635-9032-11e8-83f4-685b35836414",
+    "Name": "hc-message-test",
+    "Properties": {
+        "description": "provides an application template",
+        "language": "en"
+    },
+    "PropertiesSchemaFile": "properties_schema.json",
+    "BasedOn": "",
+    "RequiresVersion": 26,
+    "DHTConfig": {
+        "HashType": "sha2-256",
+        "RedundancyFactor": 0
+    },
+    "Progenitor": {
+        "Identity": "",
+        "PubKey": null
+    },
+    "Zomes": [
+        {
+            "Name": "messageTest",
+            "Description": "message testing zome",
+            "CodeFile": "messageTest.js",
+            "RibosomeType": "js",
+            "BridgeFuncs": null,
+            "Config": null,
+            "Entries": [
+                {
+                    "Name": "agentLink",
+                    "DataFormat": "links",
+                    "Sharing": "public"
+                },
+                {
+                    "Name": "responseRecord",
+                    "DataFormat": "string",
+                    "Sharing": "public"
+                }
+            ],
+            "Functions": [
+                {
+                    "Name": "messageRef",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "messageRefSync",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                }
+            ]
+        }
+    ]
+}
