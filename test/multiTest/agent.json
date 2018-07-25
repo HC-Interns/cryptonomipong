@@ -2,21 +2,21 @@
   "Tests": [
     {
       "Convey": "Can call the function to message",
-      "Zome": "messageTest",
+      "Zome": "pong",
       "FnName": "messageRef",
-      "Input": {"tickCount" : "%reps%"},
+      "Input": {"tickCount" : "%reps%", "vote": {"up" : true}},
       "Output": true,
       "Time": 1000,
-      "Repeat": 50,
-      "Wait" : 5
+      "Repeat": 10,
+      "Wait" : 100
     },
     {
       "Convey": "Can get the responses cached to local chain",
-      "Zome": "messageTest",
+      "Zome": "pong",
       "FnName": "getResponses",
       "Input": "getResponses().length",
       "Raw": true,
-      "Output": 50,
+      "Output": 10,
       "Time" : 9500
     }
   ]

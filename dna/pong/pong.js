@@ -1,19 +1,31 @@
 
 function messageRef(payload) {
-  var tickCount = payload.tickCount;
-
-  var agentList = getLinks(App.DNA.Hash, 'agent');
-  var agentToMessage = agentList[tickCount % agentList.length];
-  debug('Messaging: '+agentToMessage.Hash)
-  send(agentToMessage.Hash, {}, {Callback: { Function: "responseCallback", ID:''+tickCount}});
+  var tickCount = typeof payload.tickCount === 'string' ? parseInt(payload.tickCount) : payload.tickCount;
+  var vote = payload.vote;
+  castVote(tickCount, vote);
   return true;
+}
+
+function getCurrentRef(tickCount) {
+  var agentList = getLinks(App.DNA.Hash, 'agent');
+  return agentList[tickCount % agentList.length].Hash;
+}
+
+function castVote(tickCount, vote) {
+  var ref = getCurrentRef(tickCount);
+  debug('Messaging: '+ref);
+  var message = {tickCount: tickCount, vote: vote}
+  send(ref, 
+    message, 
+    {Callback: { Function: "responseCallback", ID:''+tickCount}}
+  );
 }
 
 
 function responseCallback(response, id) {
   debug("response of message tick "+id+": "+response);
-  commit('responseRecord', response);
 }
+
 
 function getResponses() {
   var result = query({
@@ -21,14 +33,25 @@ function getResponses() {
       Entries: true
     },
     Constrain: {
-      EntryTypes: ["responseRecord"],
+      EntryTypes: ["voteRecord"],
     }
   });
   debug(result);
   return result;
 }
 
+function receive(from, message) {
+  debug('message received: ' +  JSON.stringify(message));
+  commit('voteRecord', message);
+  return true;
+}
 
+
+/*=================================
+=            Callbacks            =
+=================================*/
+
+// link key hash to chain on genesis
 function genesis () {
   commit('agentLink', {
     Links: [{Base: App.DNA.Hash, Link: App.Key.Hash, Tag: 'agent'}]
@@ -36,15 +59,6 @@ function genesis () {
   return true;
 }
 
-
-function receive(from, message) {
-  return App.Key.Hash;
-}
-
-
-/*=================================
-=            Callbacks            =
-=================================*/
 
 function validateCommit (entryType, entry, header, pkg, sources) {
   return true;

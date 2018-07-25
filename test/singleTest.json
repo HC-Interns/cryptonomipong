@@ -2,11 +2,11 @@
   "Tests": [
     {
       "Convey": "Can call the function to message",
-      "Zome": "messageTest",
+      "Zome": "pong",
       "FnName": "messageRef",
-      "Input": {"tickCount" : 0},
+      "Input": {"tickCount" : 0, "vote" : {"up" : true}},
       "Output": true,
-      "Time": 500
+      "Time": 200
     }
   ]
 }

@@ -1,0 +1,7 @@
+{
+  "type" : "object",
+  "properties" : {
+    "tickCount" : {"type" : "integer"},
+    "vote" : {"type" : "object"}
+  }
+}

@@ -1,9 +1,9 @@
 {
     "Version": 1,
     "UUID": "0bb0a635-9032-11e8-83f4-685b35836414",
-    "Name": "hc-message-test",
+    "Name": "cryptonomipong",
     "Properties": {
-        "description": "provides an application template",
+        "description": "second iteration of holochain real time pong",
         "language": "en"
     },
     "PropertiesSchemaFile": "properties_schema.json",
@@ -19,12 +19,14 @@
     },
     "Zomes": [
         {
-            "Name": "messageTest",
+            "Name": "pong",
             "Description": "message testing zome",
-            "CodeFile": "messageTest.js",
+            "CodeFile": "pong.js",
             "RibosomeType": "js",
             "BridgeFuncs": null,
-            "Config": null,
+            "Config": {
+              "ErrorHandling" : "throwErrors"
+            },
             "Entries": [
                 {
                     "Name": "agentLink",
@@ -32,8 +34,9 @@
                     "Sharing": "public"
                 },
                 {
-                    "Name": "responseRecord",
-                    "DataFormat": "string",
+                    "Name": "voteRecord",
+                    "DataFormat": "json",
+                    "SchemaFile" : "voteRecordSchema.json",
                     "Sharing": "private"
                 }
             ],
