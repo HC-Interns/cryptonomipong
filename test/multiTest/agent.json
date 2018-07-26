@@ -3,18 +3,18 @@
     {
       "Convey": "Can call the function to message",
       "Zome": "pong",
-      "FnName": "messageRef",
+      "FnName": "gameTick",
       "Input": {"tickCount" : "%reps%", "vote": {"up" : true}},
       "Output": true,
       "Time": 3000,
       "Repeat": 10,
-      "Wait" : 50
+      "Wait" : 100
     },
     {
       "Convey": "Can get the responses cached to local chain",
       "Zome": "pong",
-      "FnName": "getResponses",
-      "Input": "getResponses().length",
+      "FnName": "getReceivedVotes",
+      "Input": "getReceivedVotes().length",
       "Raw": true,
       "Output": 10,
       "Time" : 9500

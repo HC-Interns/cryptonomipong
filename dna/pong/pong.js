@@ -3,33 +3,59 @@
 =            public functions            =
 ========================================*/
 
-function messageRef(payload) {
+//called every tick interval by the UI or test framework
+function gameTick(payload) {
   var tickCount = typeof payload.tickCount === 'string' ? parseInt(payload.tickCount) : payload.tickCount;
   var vote = payload.vote;
-  castVote(tickCount, vote);
+
+  // Was I the ref last tick? if so resolve the new game state
+  if(tickCount > 0 && getCurrentRef(tickCount-1) === App.Key.Hash) {
+    debug("I am di Ref!!");
+    commitNewState(tickCount);
+  }
+  castVote(tickCount, vote); // cast a vote for the next state
+  var state = getState(tickCount - 1);
+  debug("state @ "+tickCount+": ", state);
   return true;
 }
 
-function getResponses() {
-  var result = query({
+// retrieve from local chain the votes sent to you, optionally at a specific tick count
+function getReceivedVotes(tickCount) {
+  var results = query({
     Return: {
       Entries: true
     },
     Constrain: {
-      EntryTypes: ["voteRecord"],
+      EntryTypes: ["voteRecord"]
     }
   });
-  debug(result);
-  return result;
+
+  if (tickCount) {
+    results = results.filter(function(elem) {
+      return elem.tickCount === tickCount;
+    });
+  }
+
+  debug(results);
+  return results;
 }
 
 
 function getCurrentState() {
-  var gameStates = getLinks(makeHash('anchor', 'stateAnchor'), 'gameState');
+  var gameStates = getLinks(App.DNA.Hash, 'gameState');
+  debug("game states: ", gameStates);
   gameStates.sort(function (a, b) {
     return b.tickCount - a.tickCount;
   });
   return gameStates[0];
+}
+
+function getState(tickCount) {
+  var gameStates = getLinks(App.DNA.Hash, 'gameState');
+  debug("game states: ", gameStates);
+  return gameStates.filter(function(elem) {
+    return elem.tickCount === tickCount;
+  })[0];
 }
 
 /*=====  End of public functions  ======*/
@@ -38,13 +64,12 @@ function getCurrentState() {
 // a ref should call this function after they have received all votes
 // TODO: use a bundle to ensure all entries commit
 function commitNewState(tickCount) {
-  var votes = getReceivedVotes(tickCount);
-  var oldState = getCurrentState();
-  var newState = stateTransition(oldState, votes);
-  var stateAnchorHash = makeHash('anchor', 'stateAnchor');
-  var newStateHash = commit('gameState', {tickCount: tickCount, state: newState});
-  commit('link', {
-    Links: [{Base: stateAnchorHash, Link: newStateHash, Tag: 'gameState'}]
+  // var votes = getReceivedVotes(tickCount);
+  // var oldState = getCurrentState();
+  // var newState = stateTransition(oldState, votes);
+  var newStateHash = commit('gameState', {tickCount: tickCount, state: {}});
+  var linkHash = commit('link', {
+    Links: [{Base: App.DNA.Hash, Link: newStateHash, Tag: 'gameState'}]
   });
 }
 
@@ -74,20 +99,7 @@ function castVote(tickCount, vote) {
 }
 
 
-// retrieve from local chain the votes sent to you at a specific tick count
-function getReceivedVotes(tickCount) {
-  var result = query({
-    Return: {
-      Entries: true
-    },
-    Constrain: {
-      EntryTypes: ["voteRecord"],
-      Contains: "{\"tickCount\": \""+tickCount+"\"}"
-    }
-  });
-  debug(result);
-  return result;
-}
+
 
 
 /*=================================
@@ -114,7 +126,6 @@ function genesis () {
   commit('link', {
     Links: [{Base: App.DNA.Hash, Link: App.Key.Hash, Tag: 'agent'}]
   });
-  commit('anchor', 'stateAnchor');
   return true;
 }
 

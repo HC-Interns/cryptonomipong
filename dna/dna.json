@@ -53,12 +53,12 @@
             ],
             "Functions": [
                 {
-                    "Name": "messageRef",
+                    "Name": "gameTick",
                     "CallingType": "json",
                     "Exposure": "public"
                 },
                 {
-                    "Name": "getResponses",
+                    "Name": "getReceivedVotes",
                     "CallingType": "json",
                     "Exposure": "public"
                 }
