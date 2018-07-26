@@ -15,7 +15,8 @@ function gameTick(payload) {
   }
   castVote(tickCount, vote); // cast a vote for the next state
   var state = getState(tickCount - 1);
-  debug("state @ "+tickCount+": ", state);
+  debug("state @ "+tickCount+": ");
+  debug(state);
   return true;
 }
 
@@ -36,6 +37,7 @@ function getReceivedVotes(tickCount) {
     });
   }
 
+  debug("results:");
   debug(results);
   return results;
 }
@@ -43,7 +45,8 @@ function getReceivedVotes(tickCount) {
 
 function getCurrentState() {
   var gameStates = getLinks(App.DNA.Hash, 'gameState');
-  debug("game states: ", gameStates);
+  debug("game states: ");
+  debug(gameStates);
   gameStates.sort(function (a, b) {
     return b.tickCount - a.tickCount;
   });
@@ -51,11 +54,14 @@ function getCurrentState() {
 }
 
 function getState(tickCount) {
-  var gameStates = getLinks(App.DNA.Hash, 'gameState');
-  debug("game states: ", gameStates);
-  return gameStates.filter(function(elem) {
-    return elem.tickCount === tickCount;
-  })[0];
+  var gameStates = getLinks(App.DNA.Hash, 'gameState', {Load: true});
+  debug("game states:");
+  debug(gameStates);
+  for (var i=0; i < gameStates.length; i++) {
+    if (gameStates[i].Entry.tickCount === tickCount) {
+      return gameStates[i].Entry;
+    }
+  }
 }
 
 /*=====  End of public functions  ======*/
@@ -90,10 +96,10 @@ function getCurrentRef(tickCount) {
 
 function castVote(tickCount, vote) {
   var ref = getCurrentRef(tickCount);
-  debug('Messaging: '+ref);
+  debug('Messaging: ' + ref);
   var message = {tickCount: tickCount, vote: vote}
-  send(ref, 
-    message, 
+  send(ref,
+    message,
     { Callback: { Function: "responseCallback", ID:''+tickCount} }
   );
 }
@@ -110,14 +116,14 @@ function castVote(tickCount, vote) {
 // TODO: add validation
 function receive(frm, message) {
   message.from = frm;
-  debug('message received: ' +  JSON.stringify(message));
+  debug('message received: ' + JSON.stringify(message));
   commit('voteRecord', message);
   return true;
 }
 
-// called on the response of a message. For debug only at the moment
+// called on the response of a message. For //debug only at the moment
 function responseCallback(response, id) {
-  debug("response of message tick "+id+": "+response);
+  debug("response of message tick " + id + ": " + response);
 }
 
 // link key hash to chain on genesis
